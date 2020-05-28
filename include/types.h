@@ -33,23 +33,20 @@ typedef struct {
 } socket_t;
 
 typedef struct {
-    enum cmode_s {
-        CONN_PLAIN = 0,
-        CONN_PASV,
-        CONN_ACTV,
-    } c;
-    int fd;
-} cmode_t;
-
-typedef struct {
     socket_t f;
+    /* server: location of client to send data to */
+    /* client: location of server to send data to */
     char *addr_to;
+    /* client: self */
     char *addr_from;
     unsigned short port;
     char *user;
     char *pw;
+    /* client: unused */
     bool isauth;
-    cmode_t mode;
+    /* server: client's fd */
+    /* client: server's fd */
+    int fd;
 } client_t;
 
 typedef struct {

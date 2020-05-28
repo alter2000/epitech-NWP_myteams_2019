@@ -25,7 +25,6 @@ void cleanup_client(client_t *c)
     if (!c || c < &s->clients[0] || c > &s->clients[MAXCONN - 1])
         return;
     c->f.status = SOCKET_NOT_READY;
-    c->mode.c = CONN_PLAIN,
     c->isauth = false;
     c->port = 0;
     mfree(c->addr_to);
