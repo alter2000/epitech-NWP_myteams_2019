@@ -49,22 +49,22 @@ static void check_clients(client_t cs[MAXCONN],
         fd_set *readfds, int *total_sockfds)
 {
     for (size_t i = 0; i < MAXCONN; i++) {
-        if (cs[i].f.fd <= *total_sockfds)
+        if (cs[i].res.lsn.fd <= *total_sockfds)
             continue;
-        switch (cs[i].f.status) {
+        switch (cs[i].res.lsn.status) {
             case SOCKET_READY:
             case SOCKET_ERROR:
-                FD_CLR(cs[i].f.fd, readfds);
-                cs[i].f.status = SOCKET_NOT_READY;
+                FD_CLR(cs[i].res.lsn.fd, readfds);
+                cs[i].res.lsn.status = SOCKET_NOT_READY;
             case SOCKET_NOT_READY:
-                FD_SET(cs[i].f.fd, readfds);
-                cs[i].f.status = SOCKET_READY;
+                FD_SET(cs[i].res.lsn.fd, readfds);
+                cs[i].res.lsn.status = SOCKET_READY;
             case SOCKET_INUSE:
             default:
                 break;
         }
-        if (cs[i].f.fd > *total_sockfds)
-            *total_sockfds = cs[i].f.fd;
+        if (cs[i].res.lsn.fd > *total_sockfds)
+            *total_sockfds = cs[i].res.lsn.fd;
     }
 }
 
@@ -88,11 +88,11 @@ static void do_clients(client_t cs[MAXCONN], fd_set *fds)
     char buf[MAXBUFLEN];
 
     for (size_t i = 0; i < MAXCONN; i++)
-        if (FD_ISSET(cs[i].f.fd, fds)) {
+        if (FD_ISSET(cs[i].res.lsn.fd, fds)) {
             memset(buf, 0, MAXBUFLEN);
-            if (read(cs[i].f.fd, buf, MAXBUFLEN) < 2) {
+            if (read(cs[i].res.lsn.fd, buf, MAXBUFLEN) < 2) {
                 append_log(&cs[i], "disconnected\n");
-                TODO_quit(&cs[i], buf);
+                /* TODO_quit(&cs[i], buf); */
                 continue;
             }
             append_log(&cs[i], buf);

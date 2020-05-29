@@ -24,15 +24,15 @@ void cleanup_client(client_t *c)
 
     if (!c || c < &s->clients[0] || c > &s->clients[MAXCONN - 1])
         return;
-    c->f.status = SOCKET_NOT_READY;
+    c->res.lsn.status = SOCKET_NOT_READY;
     c->isauth = false;
-    c->port = 0;
+    c->res.port = 0;
     mfree(c->addr_to);
     mfree(c->addr_from);
     mfree(c->user);
     mfree(c->pw);
-    FD_CLR(c->f.fd, &s->readfds);
-    close(c->f.fd);
+    FD_CLR(c->res.lsn.fd, &s->readfds);
+    close(c->res.lsn.fd);
     memset(c, 0, sizeof(*c));
 }
 

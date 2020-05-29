@@ -33,31 +33,27 @@ typedef struct {
 } socket_t;
 
 typedef struct {
-    socket_t f;
+    socket_t lsn;
+    unsigned short port;
+    struct protoent *p_ent;
+    struct sockaddr_in sin;
+} res_t;
+
+typedef struct {
+    res_t res;
     /* server: location of client to send data to */
     /* client: location of server to send data to */
     char *addr_to;
     /* client: self */
     char *addr_from;
-    unsigned short port;
     char *user;
     char *pw;
     /* client: unused */
     bool isauth;
-    /* server: client's fd */
-    /* client: server's fd */
-    int fd;
 } client_t;
 
 typedef struct {
-    socket_t lsn;
-    unsigned short port;
-    struct protoent *p_ent;
-    struct sockaddr_in sin;
-} serverres_t;
-
-typedef struct {
-    serverres_t res;
+    res_t res;
     client_t clients[MAXCONN];
     fd_set readfds;
     int maxsd;

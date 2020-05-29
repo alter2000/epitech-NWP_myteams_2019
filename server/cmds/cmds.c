@@ -55,5 +55,5 @@ void cmd_unknown(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
-    msgsend(c->f.fd, 500, "");
+    msgsend(c->res.lsn.fd, 500, "");
 }

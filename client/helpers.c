@@ -42,7 +42,7 @@ void append_log(client_t *c, char *buf)
 {
     if (!buf || strlen(buf) < 3)
         return;
-    fprintf(stderr, "%s:%d: %s", c->addr_from, c->port, buf);
+    fprintf(stderr, "%s:%d: %s", c->addr_from, c->res.port, buf);
 }
 
 void msgsend(int sock, int code, char *msg)
