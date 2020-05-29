@@ -11,30 +11,30 @@ server: ./server/myteams_server
 	cp ./server/myteams_server .
 
 ./server/myteams_server: ./server/
-	$(MAKE) -C ./server/
+	@$(MAKE) -C ./server/
 
 client: ./client/myteams_cli
-	cp ./client/myteams_cli.
+	cp ./client/myteams_cli .
 
 ./client/myteams_cli: ./client/
-	$(MAKE) -C ./client/
+	@$(MAKE) -C ./client/
 
 clean:
-	$(MAKE) -C ./server/ clean
-	$(MAKE) -C ./client/ clean
+	@$(MAKE) -C ./server/ clean
+	@$(MAKE) -C ./client/ clean
 
 fclean:
-	$(MAKE) -C ./server/ fclean
-	$(MAKE) -C ./client/ fclean
+	@$(MAKE) -C ./server/ fclean
+	@$(MAKE) -C ./client/ fclean
 
 debug:
-	$(MAKE) -C ./server/ debug
+	@$(MAKE) -C ./server/ debug
 	cp server/myteams_server .
-	$(MAKE) -C /client/ debug
+	@$(MAKE) -C /client/ debug
 	cp server/myteams_client .
 
 re:
-	$(MAKE) fclean
-	$(MAKE) all
+	@$(MAKE) fclean
+	@$(MAKE) all
 
 .PHONY: all debug clean fclean re
