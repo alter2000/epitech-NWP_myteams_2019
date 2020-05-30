@@ -15,33 +15,31 @@
 #include "helpers.h"
 #include "types.h"
 
-socklen_t setup_client(client_t *c, const char *ip)
+socklen_t setup_client(client_t * const c, const char *ip)
 {
     c->res.p_ent = getprotobyname("TCP") ? getprotobyname("TCP")
                 : errb(strerror(errno));
-    c->res.sin.sin_family = AF_INET;
     c->res.sin.sin_port = htons(c->res.port);
-    c->res.sin.sin_addr.s_addr = htonl(INADDR_ANY);
+    c->res.sin.sin_family = AF_INET;
+    if (inet_pton(AF_INET, ip, &c->res.sin.sin_addr.s_addr) != 1) {
+        errb(strerror(errno));
+    }
     c->addr_from = strdup(inet_ntoa(c->res.sin.sin_addr));
     c->addr_to = strdup(ip);
     c->res.lsn.fd = socket(AF_INET, SOCK_STREAM, c->res.p_ent->p_proto);
+    if (c->res.lsn.fd == -1) {
+        close(c->res.lsn.fd);
+        errb(strerror(errno));
+    }
     return sizeof(c->res.sin);
 }
 
-void try_init_client(client_t *c, const char *ip)
+void try_init_client(client_t * const c, const char *ip)
 {
     socklen_t tmp = setup_client(c, ip);
 
-    if (c->res.lsn.fd == -1
-        || getsockname(c->res.lsn.fd,
-            (struct sockaddr *)&c->res.sin, &tmp) == -1
-        || connect(c->res.lsn.fd,
+    if (connect(c->res.lsn.fd,
             (struct sockaddr*)&c->res.sin, sizeof(c->res.sin))) {
-        /* || setsockopt(c->res.lsn.fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, */
-        /*         &tmp, sizeof(tmp)) == -1 */
-        /* || bind(c->res.lsn.fd, (const struct sockaddr *)&c->res.sin, */
-        /*     sizeof(c->res.sin)) == -1 */
-        /* || listen(c->res.lsn.fd, MAXCONN) == -1) { */
         close(c->res.lsn.fd);
         errb(strerror(errno));
     }
@@ -49,7 +47,7 @@ void try_init_client(client_t *c, const char *ip)
     append_log(c, "client up\n");
 }
 
-fd_set keep_init_client(client_t *c)
+fd_set keep_init_client(const client_t * const c)
 {
     fd_set fds;
 
@@ -76,36 +74,38 @@ void send_to_server(int fd)
 {
     char buf[MAXBUFLEN] = {0};
 
+    while (true) {
     buf[0] = getc(stdin);
     if (send(fd, buf, 1, 0) == -1)
         errb(strerror(errno));
+    }
 }
 
-void run_client(client_t *c)
+void run_client(client_t * const cli)
 {
-    fd_set fds = keep_init_client(c);
+    fd_set fds = keep_init_client(cli);
     struct timeval ts = {.tv_sec = 3};
-    int curfd = select(c->res.lsn.fd + 1, &fds, NULL, NULL, &ts);
+    int curfd = select(cli->res.lsn.fd + 1, &fds, NULL, NULL, &ts);
 
     if (curfd <= 0)
         errb(curfd ? strerror(errno) : "server connection timed out");
-    if (c->res.lsn.fd != 0 && FD_ISSET(c->res.lsn.fd, &fds))
-        get_from_server(c->res.lsn.fd);
+    if (cli->res.lsn.fd != 0 && FD_ISSET(cli->res.lsn.fd, &fds))
+        get_from_server(cli->res.lsn.fd);
     else if (FD_ISSET(0, &fds))
-        send_to_server(c->res.lsn.fd);
+        send_to_server(cli->res.lsn.fd);
 }
 
 int main(int c, char **v)
 {
     int p = 0;
-    client_t *cl = get_client();
+    client_t *cli = get_client();
 
     if (c == 1 || c > 3)
         show_help(84);
     if (!strncmp("-help", v[1], 5))
         show_help(0);
     p = strtol(v[2], NULL, 10);
-    cl->res.port = (p > 0 && p < 65535) ? p : (long)errb("Invalid port num");
-    try_init_client(cl, v[1]);
-    run_client(cl);
+    cli->res.port = (p > 0 && p < 65535) ? p : (long)errb("Invalid port num");
+    try_init_client(cli, v[1]);
+    run_client(cli);
 }
