@@ -18,7 +18,6 @@
 #include "helpers.h"
 
 static const cmdpair_t CMDS[] = {
-    { NULL   , 0 , cmd_unknown } ,
     { NULL   , false , 0 , cmd_unknown } ,
     { NULL   , false , 0 , cmd_help } ,
     { NULL   , false , 0 , cmd_login } ,
