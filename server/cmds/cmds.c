@@ -18,19 +18,19 @@
 #include "helpers.h"
 
 static const cmdpair_t CMDS[] = {
-    { NULL   , false , 0 , cmd_unknown } ,
-    { NULL   , false , 0 , cmd_help } ,
-    { NULL   , false , 0 , cmd_login } ,
-    { NULL   , false , 0 , cmd_logout } ,
-    { NULL   , false , 0 , cmd_user } ,
-    { NULL   , false , 0 , cmd_users } ,
-    { NULL   , false , 0 , cmd_send } ,
-    { NULL   , false , 0 , cmd_messages } ,
-    { NULL   , false , 0 , cmd_subscribe } ,
-    { NULL   , false , 0 , cmd_unsubscribe } ,
-    { NULL   , false , 0 , cmd_create } ,
-    { NULL   , false , 0 , cmd_list } ,
-    { NULL   , false , 0 , cmd_info } ,
+    { NULL   , 0 , cmd_unknown } ,
+    { NULL   , 0 , cmd_help } ,
+    { NULL   , 0 , cmd_login } ,
+    { NULL   , 0 , cmd_logout } ,
+    { NULL   , 0 , cmd_user } ,
+    { NULL   , 0 , cmd_users } ,
+    { NULL   , 0 , cmd_send } ,
+    { NULL   , 0 , cmd_messages } ,
+    { NULL   , 0 , cmd_subscribe } ,
+    { NULL   , 0 , cmd_unsubscribe } ,
+    { NULL   , 0 , cmd_create } ,
+    { NULL   , 0 , cmd_list } ,
+    { NULL   , 0 , cmd_info } ,
 };
 
 static cmdstr_t *getcmd(char *buf)
