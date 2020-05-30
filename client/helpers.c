@@ -32,8 +32,8 @@ void show_help(int exc)
 
 void *errb(const char *errmsg)
 {
-    fputs(errmsg, stderr);
-    fputs("\n", stderr);
+    fputs(errmsg, stdout);
+    fputs("\n", stdout);
     exit(84);
     return 0;
 }
@@ -42,7 +42,7 @@ void append_log(client_t *c, char *buf)
 {
     if (!buf || strlen(buf) < 3)
         return;
-    fprintf(stderr, "%s:%d: %s", c->addr_from, c->res.port, buf);
+    fprintf(stdout, "%s:%d: %s", c->addr_from, c->res.port, buf);
 }
 
 void msgsend(int sock, int code, char *msg)
