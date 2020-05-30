@@ -92,7 +92,7 @@ static void do_clients(client_t cs[MAXCONN], fd_set *fds)
             memset(buf, 0, MAXBUFLEN);
             if (read(cs[i].res.lsn.fd, buf, MAXBUFLEN) < 2) {
                 append_log(&cs[i], "disconnected\n");
-                /* TODO_quit(&cs[i], buf); */
+                cmd_quit(&cs[i], buf);
                 continue;
             }
             append_log(&cs[i], buf);

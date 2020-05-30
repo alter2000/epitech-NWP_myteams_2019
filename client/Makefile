@@ -17,7 +17,7 @@ DFLAGS = $(CFLAGS)\
 		 -fsanitize=alignment \
 		 -fsanitize=enum \
 		 -fsanitize=undefined \
-		 -g
+		 -g -ggdb
 		 # -fsanitize=nullability \
 
 OBJ = $(SRC:.c=.o)

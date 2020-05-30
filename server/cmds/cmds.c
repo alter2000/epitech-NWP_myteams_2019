@@ -139,3 +139,9 @@ void cmd_info(client_t *c, char *buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is info_cmd");
 }
+void cmd_quit(client_t *c, char *buf)
+{
+    if (buf)
+        memset(buf, 0, strlen(buf));
+    cleanup_client(c);
+}

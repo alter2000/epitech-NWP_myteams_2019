@@ -25,6 +25,7 @@ typedef struct {
 
 void handle_cmd(char *buf, client_t *);
 
+void cmd_quit(client_t *, char *buf);
 void cmd_unknown(client_t *, char *buf);
 void cmd_help(client_t *c, char *buf);
 void cmd_login(client_t *c, char *buf);
