@@ -18,17 +18,16 @@
 #include "helpers.h"
 
 static const cmdpair_t CMDS[] = {
-    { NULL   , false , 0 , cmd_unknown } ,
+    { NULL   , 0 , cmd_unknown } ,
 };
 
 static cmdstr_t *getcmd(char *buf)
 {
-    static cmdstr_t to = {NULL, cmd_unknown, false};
+    static cmdstr_t to = {NULL, cmd_unknown};
     char *cmd = NULL;
 
     to.arg = NULL;
     to.fn = cmd_unknown;
-    to.forks = false;
     if (strlen(buf) < 3)
         return &to;
     cmd = strtok(buf, " ");
@@ -37,7 +36,6 @@ static cmdstr_t *getcmd(char *buf)
     for (int i = 0; CMDS[i].s; i++)
         if (!strncasecmp(CMDS[i].s, cmd, CMDS[i].slen)) {
             to.fn = CMDS[i].cmd;
-            to.forks = CMDS[i].forks;
             break;
         }
     to.arg = strtok(NULL, "\r\n");
