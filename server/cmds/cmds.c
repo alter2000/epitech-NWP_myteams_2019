@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include "cmds.h"
 #include "helpers.h"
+#include "myteams/logging_server.h"
 
 static const cmdpair_t CMDS[] = {
     { NULL   , 0 , cmd_unknown } ,

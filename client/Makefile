@@ -9,7 +9,7 @@ SRC = $(shell find . -name "*.c")
 
 NAME = myteams_cli
 CPL = gcc
-CFLAGS = -Wextra -Wall -I../include
+CFLAGS = -Wextra -Wall -I../include -I../libs/myteams
 
 DPL = clang
 DFLAGS = $(CFLAGS)\

@@ -9,7 +9,7 @@ SRC = $(shell find . -name "*.c")
 
 NAME = myteams_server
 CPL = gcc
-CFLAGS = -Wextra -Wall -Wno-implicit-fallthrough -I../include
+CFLAGS = -Wextra -Wall -Wno-implicit-fallthrough -I../include -I../libs/myteams
 
 DPL = clang
 DFLAGS = $(CFLAGS)\
