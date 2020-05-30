@@ -26,6 +26,7 @@ clean:
 fclean:
 	@$(MAKE) -C ./server/ fclean
 	@$(MAKE) -C ./client/ fclean
+	rm -f ./myteams_server ./myteams_cli
 
 debug:
 	@$(MAKE) -C ./server/ debug
