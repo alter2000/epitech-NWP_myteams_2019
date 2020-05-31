@@ -74,72 +74,94 @@ void cmd_help(client_t *c, char *buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is help_cmd");
 }
+
 void cmd_login(client_t *c, char *buf)
 {
-    if (buf)
-        memset(buf, 0, strlen(buf));
+    if (buf == "") {
+        msgsend(c->res.lsn.fd, 500, "Sorry, cannot do that!");
+    }
+    if (c->isauth) {
+        mfree(c->user);
+        c->user = strdup(buf);
+    } else {
+        c->user = strdup(buf);
+        c->isauth = true;
+    }
+    append_log(c, buf);
     msgsend(c->res.lsn.fd, 500, "This is login_cmd");
+    server_event_user_logged_in(c->user);
 }
+
 void cmd_logout(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is logout_cmd");
 }
+
 void cmd_user(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is user_cmd");
 }
+
 void cmd_users(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is users_cmd");
 }
+
 void cmd_send(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is send_cmd");
 }
+
 void cmd_messages(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is messages_cmd");
 }
+
 void cmd_subscribe(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is subscribe_cmd");
 }
+
 void cmd_unsubscribe(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is unsubscribe_cmd");
 }
+
 void cmd_create(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is create_cmd");
 }
+
 void cmd_list(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is list_cmd");
 }
+
 void cmd_info(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
     msgsend(c->res.lsn.fd, 500, "This is info_cmd");
 }
+
 void cmd_quit(client_t *c, char *buf)
 {
     if (buf)
