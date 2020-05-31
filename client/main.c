@@ -14,6 +14,7 @@
 #include "helpers.h"
 #include "types.h"
 #include "client.h"
+#include "myteams/logging_client.h"
 
 // TODO: commands
 
@@ -25,8 +26,8 @@ static void sigclose(int signum)
 
 void get_from_server(client_t *c)
 {
-    char buf[MAXBUFLEN] = {0};
-    int rv = recv(c->res.lsn.fd, buf , 1 , 0);
+    char buf[MAX_BODY_LENGTH] = {0};
+    int rv = recv(c->res.lsn.fd, buf , MAX_BODY_LENGTH , 0);
 
     if (rv == 0) {
         errb("Connection closed by remote\n");
@@ -47,6 +48,7 @@ void send_to_server(client_t *c)
         write(c->res.lsn.fd, buf, strlen(buf));
         free(buf);
         n = 0;
+        get_from_server(c);
     }
 }
 

@@ -85,12 +85,12 @@ static int new_req(server_t *s)
 
 static void do_clients(client_t cs[MAXCONN], fd_set *fds)
 {
-    char buf[MAXBUFLEN];
+    char buf[MAX_BODY_LENGTH];
 
     for (size_t i = 0; i < MAXCONN; i++)
         if (FD_ISSET(cs[i].res.lsn.fd, fds)) {
-            memset(buf, 0, MAXBUFLEN);
-            if (read(cs[i].res.lsn.fd, buf, MAXBUFLEN) < 2) {
+            memset(buf, 0, MAX_BODY_LENGTH);
+            if (read(cs[i].res.lsn.fd, buf, MAX_BODY_LENGTH) < 2) {
                 append_log(&cs[i], "disconnected\n");
                 cmd_quit(&cs[i], buf);
                 continue;

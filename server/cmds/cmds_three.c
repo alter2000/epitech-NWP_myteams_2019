@@ -51,9 +51,9 @@ void cmd_login(client_t *c, char *buf)
 void cmd_logout(client_t *c, char *buf)
 {
     if (c->isauth) {
+        server_event_user_logged_out(c->user);
         mfree(c->user);
         c->isauth = false;
-        server_event_user_logged_out(c->user);
     } else {
         msgsend(c->res.lsn.fd, 500, "cannot logout when not logged in");
     }

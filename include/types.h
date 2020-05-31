@@ -18,8 +18,10 @@
 /* cannot be `static const int` because it's used in definitions */
 # define MAXCONN (51)
 
-/* maximum buffer size for commands */
-# define MAXBUFLEN (4096)
+/* maximum buffer size for all */
+# define MAX_BODY_LENGTH (512)
+# define MAX_NAME_LENGTH (32)
+# define MAX_DESCRIPTION_LENGTH (255)
 
 typedef enum {
     SOCKET_NOT_READY = 0,
