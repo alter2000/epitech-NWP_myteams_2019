@@ -38,13 +38,13 @@ void get_from_server(client_t *c)
     }
 }
 
-void send_to_server(int fd)
+void send_to_server(client_t *c)
 {
     char *buf = NULL;
     size_t n = 0;
 
     while (getline(&buf, &n, stdin) != -1) {
-        write(fd, buf, strlen(buf));
+        write(c->res.lsn.fd, buf, strlen(buf));
         free(buf);
         n = 0;
     }
