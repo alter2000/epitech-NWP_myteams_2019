@@ -10,11 +10,6 @@
 #include <string.h>
 #include "helpers.h"
 
-static const err_t STRSTATUS[] = {
-
-    { 0, NULL }
-};
-
 client_t *get_client()
 {
     static client_t c = {0};
@@ -45,13 +40,7 @@ void append_log(client_t *c, char *buf)
     fprintf(stdout, "%s:%d: %s", c->addr_from, c->res.port, buf);
 }
 
-void msgsend(int sock, int code, char const *msg)
+void msgsend(int sock, char const *msg)
 {
-    if (!msg || !*msg)
-        for (size_t i = 0; STRSTATUS[i].errcode; i++)
-            if (STRSTATUS[i].errcode == code) {
-                msg = (char *)STRSTATUS[i].msg;
-                break;
-            }
-    dprintf(sock, "%d %s\r\n", code, msg);
+    dprintf(sock, "%s\r\n", msg);
 }
