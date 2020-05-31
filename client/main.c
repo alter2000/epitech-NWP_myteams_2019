@@ -34,7 +34,6 @@ void get_from_server(client_t *c)
     } else if (rv < 0) {
         errb(strerror(errno));
     } else {
-        getcmd_cl(c, buf);
         write(STDOUT_FILENO, buf, rv);
     }
 }
@@ -45,6 +44,7 @@ void send_to_server(client_t *c)
     size_t n = 0;
 
     while (getline(&buf, &n, stdin) != -1) {
+        getcmd_cl(c, buf);
         write(c->res.lsn.fd, buf, strlen(buf));
         free(buf);
         n = 0;

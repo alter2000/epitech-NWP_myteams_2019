@@ -34,8 +34,7 @@ socklen_t setup_client(client_t * const c, const char *ip)
 
 void try_init_client(client_t * const c, const char *ip)
 {
-    socklen_t tmp = setup_client(c, ip);
-
+    setup_client(c, ip);
     if (connect(c->res.lsn.fd,
             (struct sockaddr*)&c->res.sin, sizeof(c->res.sin))) {
         close(c->res.lsn.fd);
