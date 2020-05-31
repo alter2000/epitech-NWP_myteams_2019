@@ -10,9 +10,11 @@ SRC = $(shell find . -name "*.c")
 NAME = myteams_server
 CPL = gcc
 CFLAGS = -Wextra -Wall -Wno-implicit-fallthrough \
-		 -I../include -I../libs/myteams
+		 -I../include -I../libs/myteams \
+		 `pkg-config --cflags uuid`
 
-LDFLAGS += -L../libs/myteams/myteams -lmyteams
+LDFLAGS += -L../libs/myteams/myteams -lmyteams \
+		   `pkg-config --libs uuid`
 
 DPL = clang
 DFLAGS = $(CFLAGS)\
