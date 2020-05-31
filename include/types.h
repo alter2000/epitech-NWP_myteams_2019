@@ -12,6 +12,7 @@
 # include <netinet/in.h>
 # include <netdb.h>
 # include <stdbool.h>
+# include <uuid/uuid.h>
 
 /* maximum connections ("clients"/"requests") */
 /* cannot be `static const int` because it's used in definitions */
@@ -47,6 +48,7 @@ typedef struct {
     /* client: self */
     char *addr_from;
     char *user;
+    uuid_t uuid;
     /* client: unused */
     bool isauth;
 } client_t;
