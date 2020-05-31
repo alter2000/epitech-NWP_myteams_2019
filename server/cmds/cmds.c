@@ -96,12 +96,14 @@ void cmd_login(client_t *c, char *buf)
 void cmd_logout(client_t *c, char *buf)
 {
     if (c->isauth) {
-	mfree(c->user);
-	c->isauth = false;
+        mfree(c->user);
+        c->isauth = false;
+        server_event_user_logged_out(c->user);
+    } else {
+        msgsend(c->res.lsn.fd, 500, "cannot logout when not logged in");
     }
     append_log(c, buf);
     msgsend(c->res.lsn.fd, 500, "This is logout_cmd");
-    server_event_user_logged_out(c->user);
 }
 
 void cmd_user(client_t *c, char *buf)
