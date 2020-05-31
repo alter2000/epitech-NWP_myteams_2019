@@ -51,8 +51,7 @@ void send_to_server(int fd)
 void run_client(client_t * const cli)
 {
     fd_set fds = keep_init_client(cli);
-    struct timeval ts = {.tv_sec = 3};
-    int curfd = select(cli->res.lsn.fd + 1, &fds, NULL, NULL, &ts);
+    int curfd = select(cli->res.lsn.fd + 1, &fds, NULL, NULL, NULL);
 
     if (curfd <= 0)
         errb(curfd ? strerror(errno) : "server connection timed out");
