@@ -17,35 +17,21 @@
 #include "../include/cmds.h"
 #include "../include/client.h"
 
-static const cmdpair_cl CMDS_CL[] = {
+static const cl_cmdpair_t CMDS_CL[] = {
     { "/help"        , 5  , cmd_help        } ,
     { NULL           , 0  , cmd_unknown     } ,
 };
 
-static cmdstr_t *getcmd_cl(char *buf)
+void getcmd_cl(client_t *c, char *buf)
 {
-    static cmdstr_t to = {NULL, cmd_unknown};
-    char *cmd = NULL;
+    cl_cmdptr fn = cmd_unknown;
+    char *cmd = strtok(buf, " ");
 
-    to.arg = NULL;
-    to.fn = cmd_unknown;
-    if (strlen(buf) < 3)
-        return &to;
-    cmd = strtok(buf, " ");
     if (!cmd)
-        return &to;
+        fn(c->uuid, c->user);
     for (int i = 0; CMDS_CL[i].s; i++)
         if (!strncasecmp(CMDS_CL[i].s, cmd, CMDS_CL[i].slen)) {
-            to.fn = CMDS_CL[i].cmd;
-            break;
+            CMDS_CL[i].cmd(c->uuid, c->user);
+            return;
         }
-    to.arg = strtok(NULL, "\r\n");
-    return &to;
-}
-
-void handle_cmd_cl(char *buf, client_t *c)
-{
-    cmdstr_t *cmd = getcmd_cl(buf);
-
-    cmd->fn(c, cmd->arg);
 }
