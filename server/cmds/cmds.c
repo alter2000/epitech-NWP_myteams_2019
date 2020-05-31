@@ -19,19 +19,19 @@
 #include "myteams/logging_server.h"
 
 static const cmdpair_t CMDS[] = {
-    { NULL   , 0 , cmd_unknown } ,
-    { NULL   , 0 , cmd_help } ,
-    { NULL   , 0 , cmd_login } ,
-    { NULL   , 0 , cmd_logout } ,
-    { NULL   , 0 , cmd_user } ,
-    { NULL   , 0 , cmd_users } ,
-    { NULL   , 0 , cmd_send } ,
-    { NULL   , 0 , cmd_messages } ,
-    { NULL   , 0 , cmd_subscribe } ,
-    { NULL   , 0 , cmd_unsubscribe } ,
-    { NULL   , 0 , cmd_create } ,
-    { NULL   , 0 , cmd_list } ,
-    { NULL   , 0 , cmd_info } ,
+    { "/help"        , 5  , cmd_help        } ,
+    { "/login"       , 6  , cmd_login       } ,
+    { "/logout"      , 7  , cmd_logout      } ,
+    { "/user"        , 5  , cmd_user        } ,
+    { "/users"       , 6  , cmd_users       } ,
+    { "/send"        , 5  , cmd_send        } ,
+    { "/messages"    , 9  , cmd_messages    } ,
+    { "/subscribe"   , 10 , cmd_subscribe   } ,
+    { "/unsubscribe" , 12 , cmd_unsubscribe } ,
+    { "/create"      , 7  , cmd_create      } ,
+    { "/list"        , 5  , cmd_list        } ,
+    { "/info"        , 5  , cmd_info        } ,
+    { NULL           , 0  , cmd_unknown     } ,
 };
 
 static cmdstr_t *getcmd(char *buf)
@@ -77,8 +77,9 @@ void cmd_help(client_t *c, char *buf)
 
 void cmd_login(client_t *c, char *buf)
 {
-    if (buf == "") {
+    if (!buf || !*buf) {
         msgsend(c->res.lsn.fd, 500, "Sorry, cannot do that!");
+        return;
     }
     if (c->isauth) {
         mfree(c->user);
