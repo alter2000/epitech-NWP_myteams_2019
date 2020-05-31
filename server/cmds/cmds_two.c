@@ -27,9 +27,16 @@ void cmd_user(client_t *c, char *buf)
 
 void cmd_users(client_t *c, char *buf)
 {
+    server_t *s = get_server();
+    char buff[MAX_BODY_LENGTH] = {0};
+
     if (buf)
         memset(buf, 0, strlen(buf));
-    msgsend(c->res.lsn.fd, "This is users_cmd");
+    for (size_t i = 0; i < MAXCONN; i++)
+        if (s->clients[i].isauth) {
+            sprintf(buff, "%s %s\n", s->clients[i].uuid, s->clients[i].user);
+            msgsend(c->res.lsn.fd, buff);
+        }
 }
 
 void cmd_send(client_t *c, char *buf)
