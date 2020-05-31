@@ -30,7 +30,6 @@ void cleanup_client(client_t *c)
     mfree(c->addr_to);
     mfree(c->addr_from);
     mfree(c->user);
-    mfree(c->pw);
     FD_CLR(c->res.lsn.fd, &s->readfds);
     close(c->res.lsn.fd);
     memset(c, 0, sizeof(*c));

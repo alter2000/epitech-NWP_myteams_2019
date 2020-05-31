@@ -47,7 +47,6 @@ typedef struct {
     /* client: self */
     char *addr_from;
     char *user;
-    char *pw;
     /* client: unused */
     bool isauth;
 } client_t;
