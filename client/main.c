@@ -5,15 +5,24 @@
 ** automated desc ftw
 */
 
+#include <arpa/inet.h>
+#include <errno.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/socket.h>
-#include <arpa/inet.h>
-#include <errno.h>
+#include <unistd.h>
 #include "helpers.h"
 #include "types.h"
+
+// TODO: commands
+
+static void sigclose(int signum)
+{
+    cleanup_client(get_client());
+    errb(strsignal(signum));
+}
 
 socklen_t setup_client(client_t * const c, const char *ip)
 {
@@ -64,9 +73,10 @@ void get_from_server(int fd)
 
     if (rv == 0) {
         errb("Connection closed by remote\n");
-    } else if (rv < 0)
-        /* TODO */
-        return;
+    } else if (rv < 0) {
+        errb(strerror(errno));
+    } else
+        write(STDOUT_FILENO, buf, rv);
 }
 
 void send_to_server(int fd)
@@ -74,13 +84,10 @@ void send_to_server(int fd)
     char *buf = NULL;
     size_t n = 0;
 
-    while (true) {
-        getline(&buf, &n, stdin);
-        if (buf) {
-            write(fd, buf, strlen(buf));
-        }
+    while (getline(&buf, &n, stdin) != -1) {
+        write(fd, buf, strlen(buf));
         free(buf);
-        buf = 0;
+        n = 0;
     }
 }
 
@@ -93,10 +100,7 @@ void run_client(client_t * const cli)
     if (curfd <= 0)
         errb(curfd ? strerror(errno) : "server connection timed out");
     send_to_server(cli->res.lsn.fd);
-    if (cli->res.lsn.fd != 0 && FD_ISSET(cli->res.lsn.fd, &fds))
-        get_from_server(cli->res.lsn.fd);
-    else if (FD_ISSET(0, &fds))
-        send_to_server(cli->res.lsn.fd);
+    FD_CLR(cli->res.lsn.fd, &fds);
 }
 
 int main(int c, char **v)
@@ -104,6 +108,8 @@ int main(int c, char **v)
     int p = 0;
     client_t *cli = get_client();
 
+    signal(SIGINT, sigclose);
+    signal(SIGPIPE, sigclose);
     if (c == 1 || c > 3)
         show_help(84);
     if (!strncmp("-help", v[1], 5))
