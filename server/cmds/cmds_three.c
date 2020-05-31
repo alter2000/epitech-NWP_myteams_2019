@@ -39,13 +39,13 @@ void cmd_login(client_t *c, char *buf)
     }
     if (c->isauth) {
         mfree(c->user);
-        c->user = strdup(buf);
+        c->user = strdup(strtok(buf, "\""));
     } else {
         c->user = strdup(strtok(buf, "\""));
         c->isauth = true;
 	uuid_generate(c->uuid);
     }
-    append_log(c, buf);
+    append_log(c, strtok(buf, "\""));
     msgsend(c->res.lsn.fd, "This is login_cmd");
     server_event_user_logged_in(c->user);
 }
