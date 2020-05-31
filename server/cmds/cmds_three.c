@@ -27,13 +27,13 @@ static const char *HELPMSG = "Welcome to the server\n"
 void cmd_help(client_t *c, char *buf)
 {
     (void)buf;
-    msgsend(c->res.lsn.fd, 500, HELPMSG);
+    msgsend(c->res.lsn.fd, HELPMSG);
 }
 
 void cmd_login(client_t *c, char *buf)
 {
     if (!buf || !*buf) {
-        msgsend(c->res.lsn.fd, 500, "Sorry, cannot do that!");
+        msgsend(c->res.lsn.fd, "Sorry, cannot do that!");
         return;
     }
     if (c->isauth) {
@@ -44,7 +44,7 @@ void cmd_login(client_t *c, char *buf)
         c->isauth = true;
     }
     append_log(c, buf);
-    msgsend(c->res.lsn.fd, 500, "This is login_cmd");
+    msgsend(c->res.lsn.fd, "This is login_cmd");
     server_event_user_logged_in(c->user);
 }
 
@@ -55,22 +55,22 @@ void cmd_logout(client_t *c, char *buf)
         mfree(c->user);
         c->isauth = false;
     } else {
-        msgsend(c->res.lsn.fd, 500, "cannot logout when not logged in");
+        msgsend(c->res.lsn.fd, "cannot logout when not logged in");
     }
     append_log(c, buf);
-    msgsend(c->res.lsn.fd, 500, "This is logout_cmd");
+    msgsend(c->res.lsn.fd, "This is logout_cmd");
 }
 
 void cmd_unknown(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
-    msgsend(c->res.lsn.fd, 500, "This is just unknown");
+    msgsend(c->res.lsn.fd, "This is just unknown");
 }
 
 void cmd_messages(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
-    msgsend(c->res.lsn.fd, 500, "This is messages_cmd");
+    msgsend(c->res.lsn.fd, "This is messages_cmd");
 }

@@ -22,33 +22,33 @@ void cmd_user(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
-    msgsend(c->res.lsn.fd, 500, "This is user_cmd");
+    msgsend(c->res.lsn.fd, "This is user_cmd");
 }
 
 void cmd_users(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
-    msgsend(c->res.lsn.fd, 500, "This is users_cmd");
+    msgsend(c->res.lsn.fd, "This is users_cmd");
 }
 
 void cmd_send(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
-    msgsend(c->res.lsn.fd, 500, "This is send_cmd");
+    msgsend(c->res.lsn.fd, "This is send_cmd");
 }
 
 void cmd_subscribe(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
-    msgsend(c->res.lsn.fd, 500, "This is subscribe_cmd");
+    msgsend(c->res.lsn.fd, "This is subscribe_cmd");
 }
 
 void cmd_unsubscribe(client_t *c, char *buf)
 {
     if (buf)
         memset(buf, 0, strlen(buf));
-    msgsend(c->res.lsn.fd, 500, "This is unsubscribe_cmd");
+    msgsend(c->res.lsn.fd, "This is unsubscribe_cmd");
 }
