@@ -26,8 +26,8 @@ static const char *HELPMSG = "Welcome to the server\n"
 
 void cmd_help(client_t *c, char *buf)
 {
-    printf("%s", HELPMSG);
-    msgsend(c->res.lsn.fd, 500, "This is help_cmd");
+    (void)buf;
+    msgsend(c->res.lsn.fd, 500, HELPMSG);
 }
 
 void cmd_login(client_t *c, char *buf)

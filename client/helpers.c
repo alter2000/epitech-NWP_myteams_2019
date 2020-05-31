@@ -45,7 +45,7 @@ void append_log(client_t *c, char *buf)
     fprintf(stdout, "%s:%d: %s", c->addr_from, c->res.port, buf);
 }
 
-void msgsend(int sock, int code, char *msg)
+void msgsend(int sock, int code, char const *msg)
 {
     if (!msg || !*msg)
         for (size_t i = 0; STRSTATUS[i].errcode; i++)
