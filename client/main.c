@@ -52,8 +52,7 @@ fd_set keep_init_client(const client_t * const c)
     fd_set fds;
 
     FD_ZERO(&fds);
-    if (c->res.lsn.fd != 0)
-        FD_SET(c->res.lsn.fd, &fds);
+    FD_SET(c->res.lsn.fd, &fds);
     FD_SET(0, &fds);
     return fds;
 }
@@ -72,12 +71,16 @@ void get_from_server(int fd)
 
 void send_to_server(int fd)
 {
-    char buf[MAXBUFLEN] = {0};
+    char *buf = NULL;
+    size_t n = 0;
 
     while (true) {
-    buf[0] = getc(stdin);
-    if (send(fd, buf, 1, 0) == -1)
-        errb(strerror(errno));
+        getline(&buf, &n, stdin);
+        if (buf) {
+            write(fd, buf, strlen(buf));
+        }
+        free(buf);
+        buf = 0;
     }
 }
 
@@ -89,6 +92,7 @@ void run_client(client_t * const cli)
 
     if (curfd <= 0)
         errb(curfd ? strerror(errno) : "server connection timed out");
+    send_to_server(cli->res.lsn.fd);
     if (cli->res.lsn.fd != 0 && FD_ISSET(cli->res.lsn.fd, &fds))
         get_from_server(cli->res.lsn.fd);
     else if (FD_ISSET(0, &fds))
