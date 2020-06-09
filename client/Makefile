@@ -10,6 +10,7 @@ SRC = $(shell find . -name "*.c")
 NAME = myteams_cli
 CPL = gcc
 CFLAGS = -Wextra -Wall -I../include -I../libs/myteams \
+		 -O0 \
 		 `pkg-config --cflags uuid`
 LDFLAGS += -L../libs/myteams/myteams -lmyteams \
 		   `pkg-config --libs uuid`

@@ -27,11 +27,13 @@ static void sigclose(int signum)
 void get_from_server(client_t *c)
 {
     char buf[MAX_BODY_LENGTH] = {0};
-    int rv = recv(c->res.lsn.fd, buf , MAX_BODY_LENGTH , 0);
+    int rv = recv(c->res.lsn.fd, buf, MAX_BODY_LENGTH , 0);
 
     if (rv == 0) {
+        cleanup_client(c);
         errb("Connection closed by remote\n");
     } else if (rv < 0) {
+        cleanup_client(c);
         errb(strerror(errno));
     } else {
         write(STDOUT_FILENO, buf, rv);
@@ -50,6 +52,7 @@ void send_to_server(client_t *c)
         n = 0;
         get_from_server(c);
     }
+    free(buf);
 }
 
 void run_client(client_t * const cli)
@@ -61,6 +64,7 @@ void run_client(client_t * const cli)
         errb(curfd ? strerror(errno) : "server connection timed out");
     send_to_server(cli);
     FD_CLR(cli->res.lsn.fd, &fds);
+    cleanup_client(cli);
 }
 
 int main(int c, char **v)

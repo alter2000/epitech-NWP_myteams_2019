@@ -8,8 +8,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
 #include "cmds.h"
 #include "client.h"
+#include "helpers.h"
 #include "myteams/logging_client.h"
 
 static int cl_cmd_unknown(const char *a, const char *b)
@@ -28,8 +30,13 @@ static const cl_cmdpair_t CMDS_CL[] = {
 void getcmd_cl(client_t *c, char *buf)
 {
     cl_cmdptr fn = cl_cmd_unknown;
-    char *cmd = strtok(buf, " ");
+    char *ss = strdup(buf);
+    char *cmd = strtok(ss, " ");
 
+    if (!ss) {
+        cleanup_client(c);
+        errb(strerror(errno));
+    }
     if (!cmd)
         fn((const char*)c->uuid, c->user);
     for (int i = 0; CMDS_CL[i].s; i++)
@@ -37,4 +44,5 @@ void getcmd_cl(client_t *c, char *buf)
             CMDS_CL[i].cmd((const char*)c->uuid, c->user);
             return;
         }
+    free(ss);
 }
