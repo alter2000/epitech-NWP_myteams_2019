@@ -31,8 +31,8 @@ fclean:
 debug:
 	@$(MAKE) -C ./server/ debug
 	cp server/myteams_server .
-	@$(MAKE) -C /client/ debug
-	cp server/myteams_client .
+	@$(MAKE) -C ./client/ debug
+	cp client/myteams_cli .
 
 re:
 	@$(MAKE) fclean

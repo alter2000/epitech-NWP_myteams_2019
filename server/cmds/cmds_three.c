@@ -17,6 +17,7 @@
 #include <uuid/uuid.h>
 #include "cmds.h"
 #include "helpers.h"
+#include "types.h"
 #include "myteams/logging_server.h"
 
 static const char *HELPMSG = "Welcome to the server\n"
@@ -34,7 +35,7 @@ void cmd_help(client_t *c, char *buf)
 void cmd_login(client_t *c, char *buf)
 {
     if (!buf || !*buf || strlen(buf) > MAX_NAME_LENGTH) {
-        msgsend(c->res.lsn.fd, "Sorry, cannot do that!");
+        msgsend(c->res.lsn.fd, "username too long or null");
         return;
     }
     if (c->isauth) {
@@ -43,10 +44,10 @@ void cmd_login(client_t *c, char *buf)
     } else {
         c->user = strdup(strtok(buf, "\""));
         c->isauth = true;
-	uuid_generate(c->uuid);
+        uuid_generate(c->uuid);
     }
     append_log(c, strtok(buf, "\""));
-    msgsend(c->res.lsn.fd, "This is login_cmd");
+    msgsend(c->res.lsn.fd, "should be logged in");
     server_event_user_logged_in(c->user);
 }
 
@@ -54,13 +55,12 @@ void cmd_logout(client_t *c, char *buf)
 {
     if (c->isauth) {
         server_event_user_logged_out(c->user);
-        mfree(c->user);
         c->isauth = false;
     } else {
         msgsend(c->res.lsn.fd, "cannot logout when not logged in");
     }
     append_log(c, buf);
-    msgsend(c->res.lsn.fd, "This is logout_cmd");
+    msgsend(c->res.lsn.fd, "should be logged out");
 }
 
 void cmd_unknown(client_t *c, char *buf)
