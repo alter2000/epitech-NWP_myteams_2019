@@ -13,6 +13,7 @@
 #include "helpers.h"
 #include "cmds.h"
 #include "reqs.h"
+#include "types.h"
 
 static int check_req(server_t *s);
 static void check_clients(client_t cs[MAXCONN], fd_set *, int *);
@@ -90,7 +91,7 @@ static void do_clients(client_t cs[MAXCONN], fd_set *fds)
     for (size_t i = 0; i < MAXCONN; i++)
         if (FD_ISSET(cs[i].res.lsn.fd, fds)) {
             memset(buf, 0, MAX_BODY_LENGTH);
-            if (read(cs[i].res.lsn.fd, buf, MAX_BODY_LENGTH) < 2) {
+            if (sock_getline(cs[i].res.lsn.fd, buf, MAX_BODY_LENGTH) < 1) {
                 append_log(&cs[i], "disconnected\n");
                 cmd_quit(&cs[i], buf);
                 continue;

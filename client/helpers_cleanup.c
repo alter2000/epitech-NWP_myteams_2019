@@ -41,3 +41,26 @@ void mfree(void *p)
         p = NULL;
     }
 }
+
+ssize_t sock_getline(int fd, char *rbuf, size_t max)
+{
+    ssize_t n = 1;
+    char *bufp = rbuf;
+
+    for (int c, rret; n < max; n++) {
+        rret = read(fd, &c, 1);
+        if (rret == 1) {
+            *bufp++ = c;
+            if (c == '\r' || c == '\n')
+                break;
+        } else if (rret == 0) {
+            if (n == 1)
+                return 0;
+            else
+                break;
+        } else
+            return -1;
+    }
+    *bufp = 0;
+    return n;
+}

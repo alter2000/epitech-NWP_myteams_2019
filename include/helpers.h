@@ -24,5 +24,6 @@ void mfree(void *p);
 server_t *get_server(void);
 client_t *get_client(void);
 void cleanup_client(client_t *);
+ssize_t sock_getline(int fd, char *rbuf, size_t max);
 
 #endif

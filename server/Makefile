@@ -10,6 +10,7 @@ SRC = $(shell find . -name "*.c")
 NAME = myteams_server
 CPL = gcc
 CFLAGS = -Wextra -Wall -Wno-implicit-fallthrough \
+		 -O0 \
 		 -I../include -I../libs/myteams \
 		 `pkg-config --cflags uuid`
 
@@ -18,12 +19,12 @@ LDFLAGS += -L../libs/myteams/myteams -lmyteams \
 
 DPL = clang
 DFLAGS = $(CFLAGS)\
-		 -fsanitize=address \
-		 -fsanitize=alignment \
-		 -fsanitize=enum \
-		 -fsanitize=undefined \
-		 -g
-		 # -fsanitize=nullability \
+		 -g \
+		 # -fsanitize=address \
+		 # -fsanitize=alignment \
+		 # -fsanitize=enum \
+		 # -fsanitize=undefined \
+		 # # -fsanitize=nullability \
 
 OBJ = $(SRC:.c=.o)
 

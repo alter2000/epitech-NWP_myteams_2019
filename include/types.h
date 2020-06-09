@@ -20,8 +20,8 @@
 
 /* maximum buffer size for all */
 # define MAX_BODY_LENGTH (512)
-# define MAX_NAME_LENGTH (32)
-# define MAX_DESCRIPTION_LENGTH (255)
+static const int MAX_NAME_LENGTH = 32;
+static const int MAX_DESCRIPTION_LENGTH = 255;
 
 typedef enum {
     SOCKET_NOT_READY = 0,
